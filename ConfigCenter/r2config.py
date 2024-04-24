@@ -6,16 +6,28 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class R2Config:
-    def __init__(self, cf_r2_account_id: str, cf_r2_access_key_id: str, cf_r2_secret_access_key: str, cf_r2_region: str, cf_r2_bucket_name: str) -> None:
-
+    def __init__(self, 
+                 cf_r2_account_id: str = None, 
+                 cf_r2_access_key_id: str = None, 
+                 cf_r2_secret_access_key: str = None, 
+                 cf_r2_region: str = None, 
+                 cf_r2_bucket_name: str = None) -> None:
+        
+        # 设置默认参数从环境变量读取
+        self.cf_r2_account_id = cf_r2_account_id or os.getenv('CF_R2_ACCOUNT_ID')
+        self.cf_r2_access_key_id = cf_r2_access_key_id or os.getenv('CF_R2_ACCESS_KEY_ID')
+        self.cf_r2_secret_access_key = cf_r2_secret_access_key or os.getenv('CF_R2_SECRET_ACCESS_KEY')
+        self.cf_r2_region = cf_r2_region or os.getenv('CF_R2_REGION')
+        self.bucket_name = cf_r2_bucket_name or os.getenv('CF_R2_BUCKET_NAME')
+        
+        # 初始化 boto3 S3 客户端
         self.s3 = boto3.client(
-            service_name ="s3",
-            endpoint_url = f'https://{cf_r2_account_id}.r2.cloudflarestorage.com',
-            aws_access_key_id = cf_r2_access_key_id,
-            aws_secret_access_key = cf_r2_secret_access_key,
-            region_name=cf_r2_region, # Must be one of: wnam, enam, weur, eeur, apac, auto
+            service_name="s3",
+            endpoint_url=f'https://{self.cf_r2_account_id}.r2.cloudflarestorage.com',
+            aws_access_key_id=self.cf_r2_access_key_id,
+            aws_secret_access_key=self.cf_r2_secret_access_key,
+            region_name=self.cf_r2_region,  # Must be one of: wnam, enam, weur, eeur, apac, auto
         )
-        self.bucket_name = cf_r2_bucket_name
     
     def read_text(self, file_name: str):
         # 从 S3 获取文件对象
@@ -96,12 +108,7 @@ def main():
     None
 
 if __name__ == "__main__":
-    cf_r2_account_id = os.environ['CF_R2_ACCOUNT_ID']
-    cf_r2_access_key_id = os.environ['CF_R2_ACCESS_KEY_ID']
-    cf_r2_secret_access_key = os.environ['CF_R2_SECRET_ACCESS_KEY']
-    cf_r2_region = os.environ['CF_R2_REGION']
-
-    config = R2Config(cf_r2_account_id, cf_r2_access_key_id, cf_r2_secret_access_key, cf_r2_region, 'service-tokens')
+    config = R2Config()
     object_information = config.read_json('openai_zenuml.json')
     print(object_information)
     openai_json = config.read_openai_service('xiaowenz')
