@@ -5,7 +5,7 @@ import json
 from dotenv import load_dotenv
 load_dotenv()
 
-class R2StateHelper:
+class R2Config:
     def __init__(self, cf_r2_account_id: str, cf_r2_access_key_id: str, cf_r2_secret_access_key: str, cf_r2_region: str, cf_r2_bucket_name: str) -> None:
 
         self.s3 = boto3.client(
@@ -101,11 +101,11 @@ if __name__ == "__main__":
     cf_r2_secret_access_key = os.environ['CF_R2_SECRET_ACCESS_KEY']
     cf_r2_region = os.environ['CF_R2_REGION']
 
-    state = R2StateHelper(cf_r2_account_id, cf_r2_access_key_id, cf_r2_secret_access_key, cf_r2_region, 'service-tokens')
-    object_information = state.read_json('openai_zenuml.json')
+    config = R2Config(cf_r2_account_id, cf_r2_access_key_id, cf_r2_secret_access_key, cf_r2_region, 'service-tokens')
+    object_information = config.read_json('openai_zenuml.json')
     print(object_information)
-    openai_json = state.read_openai_service('xiaowenz')
+    openai_json = config.read_openai_service('xiaowenz')
     print(openai_json['OPENAI_API_KEY'])
-    tgbot_json = state.read_tgbot('iMessage')
+    tgbot_json = config.read_tgbot('iMessage')
     print(tgbot_json['TG_BOT_TOKEN'])
     #####
