@@ -92,7 +92,8 @@ class R2StateHelper:
     def read_tgbot(self, bot_name):
         return self.read_json(f'tgbot_{bot_name}.json')
 
-
+def main():
+    None
 
 if __name__ == "__main__":
     cf_r2_account_id = os.environ['CF_R2_ACCOUNT_ID']
