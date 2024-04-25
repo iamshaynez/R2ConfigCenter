@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     name="r2config",
-    version="0.1.0",
+    version="0.1.1",
     author="xiaowenz",
     author_email="xiaowen.z@outlook.com",
     description="R2 Config Center.",
@@ -17,7 +17,7 @@ setup(
     long_description=open("README.md", encoding="utf-8").read(),
     long_description_content_type="text/markdown",
     entry_points={
-        "console_scripts": ["r2config = ConfigCenter.r2config:main"],
+        "console_scripts": ["r2config = r2config.r2config:main"],
     },
     classifiers=[
         "Intended Audience :: Developers",
